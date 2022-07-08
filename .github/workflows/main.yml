@@ -45,4 +45,6 @@ jobs:
         run: python3 ./run.py '${{ secrets.FUDAN }}'
     
       - name: run.py2-2
-        run: python3 ./run.py '${{ secrets.FUDAN2 }}'
+        run: |
+          python3 ./edit_actions.py '${{ secrets.SCHEDULE }}'
+          python3 ./run.py '${{ secrets.FUDAN2 }}'
