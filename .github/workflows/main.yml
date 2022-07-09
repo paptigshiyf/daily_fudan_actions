@@ -2,8 +2,7 @@ name: "Daily Fudan"
 
 on:
   schedule: # scheduled at (UTC+8) everyday
-    - cron: "52 19 * * *"
-    - cron: "52 7 * * *"
+    - cron: "52 23 * * *"
   workflow_dispatch:
 
 env:
@@ -17,6 +16,7 @@ jobs:
     # if: github.ref == 'refs/heads/master'
 
     steps:
+      
       - name: Checkout master with GH_PAT
         if: ${{ env.FUCK_GH_PAT }}
         uses: actions/checkout@v2
@@ -37,12 +37,17 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Random sleep
+        if: github.event_name == 'schedule'
+        run: sleep $(shuf -i 10-300 -n 1)
+
       - name: edit_actions.py
         if: ${{ env.FUCK_GH_PAT }}
         run: python3 ./edit_actions.py '${{ secrets.SCHEDULE }}'
 
       - name: run.py
         run: python3 ./run.py '${{ secrets.FUDAN }}'
+        
       - name: Checkout master with GH_PAT
         if: ${{ env.FUCK_GH_PAT }}
         uses: actions/checkout@v2
